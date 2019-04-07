@@ -175,6 +175,7 @@ public class SU<your_student_number> {
 
         return grid;
     }
+    //hi
 
     public static void main (String[] args) {
         //TODO: Read in a comamnd line argument that states whether the program will be in either terminal
