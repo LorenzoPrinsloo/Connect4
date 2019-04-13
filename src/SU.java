@@ -1,12 +1,8 @@
-import com.sun.tools.javac.util.List;
-import java.io.FileWriter;
-import java.io.*;
-import java.util.Scanner;
 import java.io.File;
-import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
+import java.io.FileWriter;
+import java.util.Scanner;
 
-public class SU<your_student_number> {
+public class SU {
     //Board size
     static int X = 6;
     static int Y = 7;
@@ -16,8 +12,8 @@ public class SU<your_student_number> {
     public static boolean isFull(int[] column) {
         boolean full = true;
 
-        for(int i = 0; i <= column.length; i ++) {
-            if(column[i] != 0) {
+        for(int i = 0; i < column.length; i ++) {
+            if(column[i] == 0) {
                 return false;
             }
         }
@@ -31,23 +27,33 @@ public class SU<your_student_number> {
         boolean isFirstOpen = true;
         int [] column = getColumn(grid, columnNum);
 
-        for(int i = 0; i == column.length - 1; i ++) {
+        for(int i = column.length - 1; i > 0 ; i --) {
             if(column[i] == 0 && isFirstOpen) {
                 column[i] = player;
                 isFirstOpen = false;
             }
         }
+
+        updateColumn(grid, column, columnNum);
         return grid;
     }
 
     //TODO add to insert functions
+
+    /**
+     * takes index of column and returns it as a array
+     *
+     * @param grid int[][]
+     * @param column int
+     * @return int[]
+     */
     public static int[] getColumn(int[][] grid, int column) {
-        int[] col = new int [7];
+        int[] col = new int [grid.length];
         int c = 0;
 
-        for (int i = 0; i == grid.length - 1; i++) {
+        for (int i = 0; i < grid.length ; i++) {
 
-            for (int j = 0; j == grid[i].length - 1; j++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 if(j == column) {
                     col[c] = grid[i][j];
                     c++;
@@ -63,83 +69,116 @@ public class SU<your_student_number> {
         boolean isFirstOpen = true;
         int [] column = getColumn(grid, columnNum);
 
-        for(int i = 0; i <= column.length; i ++) {
+        for(int i = column.length - 1; i > 0; i --) {
             if(column[i] == 0 && isFirstOpen) {
                 if(i != column.length - 1) column[i + 1] = player;
-                else column[i] = player;
+                else {
+                    column[i] = player; //if empty insert player disk
+                }
                 isFirstOpen = false;
             }
         }
+
+        updateColumn(grid, column, columnNum);
+
         return grid;
     }
 
     public static boolean isInYRange(int row, int yPosition) {
-        return row <= yPosition + 1 && row >= yPosition - 1;
+        return row == yPosition + 1 || row == yPosition - 1 || row == yPosition;
     }
 
-    public static boolean isInXRange(int row, int xPosition) {
-        return row <= xPosition + 1 && row >= xPosition - 1;
+    public static boolean isInXRange(int column, int xPosition) {
+        return column == xPosition + 1 || column == xPosition - 1 || column == xPosition;
+    }
+
+    public static void printArray(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+        }
+        System.out.println();
     }
 
     public static int[] gravity(int [] column) {
+        boolean isFirst = true;
         int offset = 0;
         int top = 0;
 
         //calc top position
-        for (int i = column.length; i == 0; i--) {
-            if(column[i] == 1 || column[i] == 2) top = i;
+        for (int i = 0; i < column.length; i++) {
+            if((column[i] == 1 || column[i] == 2) && isFirst) {
+                top = i;
+                isFirst = false;
+            }
         }
 
         // calc offset
-        for (int j = 0; j <= column.length; j++) {
-            if(column[j] == 0 && j < top) offset++;
+        for (int j = column.length - 1; j > 0; j--) {
+            if(column[j] == 0 && j > top) offset++;
         }
 
         // shift array values
-        for (int k = top; k == 0; k--) {
-            if(k > top) column[k-offset] = column[k];
+        for (int k = top; k < column.length; k++) {
+            if((k + offset) < (column.length)) {
+                column[k+offset] = column[k];
+                column[k] = 0;
+            }
         }
 
         return column;
     }
 
     public static int[][] insertTeleporter(int[][] grid, int columnNum, int player) {
+
         boolean isFirstOpen = true;
         int [] column = getColumn(grid, columnNum);
 
         if(isFull(column)) {
             column[0] = player;
+            updateColumn(grid, column, columnNum);
         } else if(isEmpty(column)) {
             column[column.length - 1] = player;
+            updateColumn(grid, column, columnNum);
         } else {
 
-            for(int i = 0; i <= column.length - 1; i ++) {
+            for(int i = column.length - 1; i > 0; i --) {
                 if(column[i] == 0 && isFirstOpen) {
-                    if(i+3 > column.length - 1) {
-                        int remainder = 3 - ((column.length - 1) - i);
-                        column[remainder] = player;
-                    } else column[i+3] = player;
+                    if(columnNum+3 > column.length - 1) {
+                        int remainder = i - 2;
+                        grid[i][remainder] = player;
+                    } else {
+                        grid[i][columnNum+3] = player;
+                    }
                     isFirstOpen = false;
                 }
             }
         }
 
-
-        // add modified columns into grid
-        for (int j = 0; j == column.length - 1; j++) {
-            grid[columnNum][j] = column[j];
-        }
         return grid;
     }
 
+    public static void printMatrix(int[][] matrix){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
     public static int[][] insertBomb(int [][] grid, int columnNum, int player) {
         boolean isFirstOpen = true;
+
+        //position of bomb
         int yPosition = 0;
         int xPosition = columnNum;
+
         int [] column = getColumn(grid, columnNum);
 
         //insert bomb
-        for(int i = 0; i <= column.length; i ++) {
+
+        for(int i = column.length - 1; i > 0; i--) {
             if(column[i] == 0 && isFirstOpen) {
                 column[i] = player;
                 isFirstOpen = false;
@@ -148,34 +187,44 @@ public class SU<your_student_number> {
         }
 
         // update columns into grid
-        for (int j = 0; j == column.length - 1; j++) {
-            grid[columnNum][j] = column[j];
+        for (int j = 0; j < column.length; j++) {
+            grid[j][columnNum] = column[j];
         }
 
         //explode !!!
-        for(int row = 0; row <= grid.length; row++) {
+        for(int r = 0; r < grid.length; r++) {
 
-            for(int c = 0; c <= grid[row].length; c++) {
+            for(int c = 0; c < grid[r].length; c++) {
 
-                if(isInYRange(row, yPosition) && isInXRange(row, xPosition)) {
-                    grid[row][c] = 0;
+                if(isInYRange(r, yPosition) && isInXRange(c, xPosition)) {
+                    grid[r][c] = 0;
                 }
             }
         }
 
+        //Insert bomb token
+        grid[yPosition][xPosition] = player;
 
         //Shift effected columns
-        int[][] effectedColumns = {grid[yPosition - 1], grid[yPosition], grid[yPosition + 1]};
+        int[][] effectedColumns = {getColumn(grid,xPosition - 1), getColumn(grid, xPosition), getColumn(grid,xPosition + 1)};
+
+        printMatrix(grid);
+        System.out.println();
 
         int c = -1;
         for (int[] col: effectedColumns) {
-            grid[yPosition + c] = gravity(col);
+            updateColumn(grid, gravity(col), xPosition + c);
             c++;
         }
 
         return grid;
     }
-    //hi
+
+    public static void updateColumn(int [][] grid, int[] column, int pos) {
+        for (int i = 0; i < grid.length; i++) {
+            grid[i][pos] = column[i];
+        }
+    }
 
     public static void main (String[] args) {
         //TODO: Read in a comamnd line argument that states whether the program will be in either terminal
@@ -231,7 +280,7 @@ public class SU<your_student_number> {
                     case 0: Exit();
                             break;
 
-                    case 1: if(column <= 6) {
+                    case 1: if(column < 6) {
 
                                 if(!isFull(grid[column])) {
                                     if(player1) {
@@ -335,8 +384,12 @@ public class SU<your_student_number> {
 				//Displays the grid after a new move was played
                 Display(grid);
 				//TODO: Checks whether a winning condition was met
-                int win = Check_Win(grid);
+                int win = Check_Win(grid, player1);
 
+                if(win != 0) {
+                    System.out.println("Player "+ win +" Wins!!!");
+                    System.out.println("Thanks for playing");
+                }
                 //TODO: Switch the players turns
 
             }
@@ -355,14 +408,14 @@ public class SU<your_student_number> {
         //TODO: Display the given board state with empty spots as *, player 1 as R and player 2 as Y. Shows column and row numbers at the top.
         int c = 1;
 
-        for (int r = 1; r == X; r++) {
+        for (int r = 1; r < X; r++) {
             System.out.print(" " +r+ " ");
         }
 
-        for (int i = 0; i == grid.length - 1; i++) {
+        for (int i = 0; i < grid.length ; i++) {
             System.out.println();
             System.out.print(" " +c+ " ");
-            for (int j = 0; j == grid[i].length - 1; j++) {
+            for (int j = 0; j < grid[i].length ; j++) {
                 if(grid[i][j] == 0) System.out.print(" * ");
                 if(grid[i][j] == 1) System.out.print(" R ");
                 if(grid[i][j] == 2) System.out.print(" Y ");
@@ -378,6 +431,13 @@ public class SU<your_student_number> {
         System.out.println("Thanks for playing");
         System.exit(0);
         //TODO: Exit the game
+    }
+
+    public static void diagonal(int [][] grid) {
+        int pos = 0;
+        for (int i = pos; i < grid.length; i++) {
+
+        }
     }
 
     /**
@@ -397,9 +457,54 @@ public class SU<your_student_number> {
      *Checks whether a player has 4 tokens in a row or if the game is a draw.
      * @param grid The current board state in a 2D array of integers
      */
-    public static int Check_Win (int [][] grid) {
+    public static int Check_Win (int [][] grid, boolean player1) {
+        int player = player1 ? 1 : 0;
         int winner = 0;
         //TODO: Check for all the possible win conditions as well as for a possible draw.
+
+        // horizontalCheck
+        for (int j = 0; j<Y-3 ; j++ ){
+            for (int i = 0; i<X; i++){
+                if (grid[i][j] == player && grid[i][j+1] == player && grid[i][j+2] == player && grid[i][j+3] == player){
+                    return player;
+                }
+            }
+        }
+        // verticalCheck
+        for (int i = 0; i<X-3 ; i++ ){
+            for (int j = 0; j<Y; j++){
+                if (grid[i][j] == player && grid[i+1][j] == player && grid[i+2][j] == player && grid[i+3][j] == player){
+                    return player;
+                }
+            }
+        }
+
+        // ascendingDiagonalCheck
+        for (int i=3; i<X; i++){
+            for (int j=0; j<Y-3; j++){
+                if (grid[i][j] == player && grid[i-1][j+1] == player && grid[i-2][j+2] == player && grid[i-3][j+3] == player)
+                    return player;
+            }
+        }
+        // descendingDiagonalCheck
+        for (int i=3; i<X; i++){
+            for (int j=3; j<Y; j++){
+                if (grid[i][j] == player && grid[i-1][j-1] == player && grid[i-2][j-2] == player && grid[i-3][j-3] == player)
+                    return player;
+            }
+        }
+
+        int full = 0;
+        for (int i = 0; i < grid[0].length; i++) {
+            if(grid[0][i] == 1 || grid[0][i] == 2) {
+                full++;
+            }
+        }
+        if (grid[0].length == full) {
+            winner = 0; //Draw
+            System.out.println("Draw Game Over");
+            Exit();
+        }
         return winner;
     }
 
