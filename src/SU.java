@@ -221,8 +221,10 @@ public class SU {
     }
 
     public static void updateColumn(int [][] grid, int[] column, int pos) {
-        for (int i = 0; i < grid.length; i++) {
-            grid[i][pos] = column[i];
+        if(pos >= 0) {
+            for (int i = 0; i < grid.length; i++) {
+                grid[i][pos] = column[i];
+            }
         }
     }
 
@@ -267,100 +269,101 @@ public class SU {
                     System.out.print("Player 2's turn (You are Yellow):");
                     curppowers = p2powers;
                 }
-                System.out.print("Choose your move: \n 1. Play Normal \n 2. Play Bomb ("+curppowers[0]+" left) \n 3. Play Teleportation ("+curppowers[1]+" left) \n 4. Play Colour Changer ("+curppowers[2]+" left)\n 5. Display Gameboard \n 6. Load Test File \n 0. Exit");
+                System.out.print("Choose your move: \n 1. Play Normal \n 2. Play Bomb ("+curppowers[0]+" left) \n 3. Play Teleportation ("+curppowers[1]+" left) \n 4. Play Colour Changer ("+curppowers[2]+" left)\n 5. Display Gameboard \n 6. Load Test File \n 0. Exit \n");
 
                 Scanner in = new Scanner(System.in);
-
                 input = in.nextInt();
-
-                System.out.print("Choose a column to play in:");
-                int column = in.nextInt();
 
                 switch(input) {
                     case 0: Exit();
                             break;
 
-                    case 1: if(column < 6) {
+                    case 1: {
+                        System.out.print("Choose a column to play in:");
+                        int column = in.nextInt() - 1;
 
-                                if(!isFull(grid[column])) {
-                                    if(player1) {
-                                        grid = insert(grid, column, 1);
-                                        player1 = false;
-                                    } else {
-                                        //is player 2's turn
-                                        grid = insert(grid, column, 2);
-                                        player1 = true;
-                                    }
+                        if(column <= 6) {
+
+                            if(!isFull(getColumn(grid, column))) {
+                                if(player1) {
+                                    grid = insert(grid, column, 1);
+                                    player1 = false;
                                 } else {
-                                    System.out.println("Error: Column is already full");
+                                    //is player 2's turn
+                                    grid = insert(grid, column, 2);
+                                    player1 = true;
                                 }
-                            }
-                            //TODO: Read in chosen column
-                            //TODO: Check that value is within the given bounds, check that the data is numeric
-                            //TODO: Play normal disc in chosen column
-                            break;
-
-                    case 2: if(!isFull(grid[column])) {
-                                if(curppowers[0] > 0){
-                                    if(player1) {
-                                        grid = insertBomb(grid, column, 1);
-                                        player1 = false;
-                                    } else {
-                                        //is player 2's turn
-                                        grid = insertBomb(grid, column, 2);
-                                        player1 = true;
-                                    }
-                                    curppowers[0]--;
-                                } else System.out.println("Error: Out of bombs");
                             } else {
                                 System.out.println("Error: Column is already full");
                             }
+                        }
+                        break;
+                    }
 
-							//TODO: Read in chosen column
-							//TODO: Check that value is within the given bounds, check that the data is numeric
-							//TODO: Play bomb disc in chosen column and reduce the number of bombs left
-							//TODO: Check that player has bomb discs left to play, otherwise print out an error message
-                            break;
+                    case 2: {
+                        System.out.print("Choose a column to play in:");
+                        int column = in.nextInt() - 1;
 
-                    case 3: if(curppowers[1] > 0){
-                                    if(player1) {
-                                        grid = insertTeleporter(grid, column, 1);
-                                        player1 = false;
-                                    } else {
-                                        //is player 2's turn
-                                        grid = insertTeleporter(grid, column, 2);
-                                        player1 = true;
-                                    }
-                                    curppowers[1]--;
-                                } else System.out.println("Error: Out of teleporters");
+                        if(!isFull(getColumn(grid, column))) {
+                            if(curppowers[0] > 0){
+                                if(player1) {
+                                    grid = insertBomb(grid, column, 1);
+                                    player1 = false;
+                                } else {
+                                    //is player 2's turn
+                                    grid = insertBomb(grid, column, 2);
+                                    player1 = true;
+                                }
+                                curppowers[0]--;
+                            } else System.out.println("Error: Out of bombs");
+                        } else {
+                            System.out.println("Error: Column is already full");
+                        }
 
-							//TODO: Read in chosen column
-							//TODO: Check that value is within the given bounds, check that the data is numeric
-							//TODO: Play teleport disc in chosen column and reduce the number of teleporters left
-							//TODO: Check that player has teleport discs left to play, otherwise print out an error message
-                            break;
+                        break;
+                    }
 
-                    case 4: if(!isFull(grid[column])) {
-                                if(curppowers[2] > 0){
-                                    if(player1) {
-                                        grid = insertColorChanger(grid, column, 1);
-                                        player1 = false;
-                                    } else {
-                                        //is player 2's turn
-                                        grid = insertColorChanger(grid, column, 2);
-                                        player1 = true;
-                                    }
-                                    curppowers[2]--;
-                                } else System.out.println("Error: Out of Color changers");
+                    case 3: {
+                        System.out.print("Choose a column to play in:");
+                        int column = in.nextInt() - 1;
+
+                        if(curppowers[1] > 0){
+                            if(player1) {
+                                grid = insertTeleporter(grid, column, 1);
+                                player1 = false;
                             } else {
-                                System.out.println("Error: Column is already full");
+                                //is player 2's turn
+                                grid = insertTeleporter(grid, column, 2);
+                                player1 = true;
                             }
+                            curppowers[1]--;
+                        } else System.out.println("Error: Out of teleporters");
 
-							//TODO: Read in chosen column
-							//TODO: Check that value is within the given bounds, check that the data is numeric
-							//TODO: Play Colour Change disc in chosen column and reduce the number of colour changers left
-							//TODO: Check that player has Colour Change discs left to play, otherwise print out an error message
-                            break;
+                        break;
+                    }
+
+                    case 4: {
+                        System.out.print("Choose a column to play in:");
+                        int column = in.nextInt() - 1;
+
+                        if(!isFull(getColumn(grid, column))) {
+                            if(curppowers[2] > 0){
+                                if(player1) {
+                                    grid = insertColorChanger(grid, column, 1);
+                                    player1 = false;
+                                } else {
+                                    //is player 2's turn
+                                    grid = insertColorChanger(grid, column, 2);
+                                    player1 = true;
+                                }
+                                curppowers[2]--;
+                            } else System.out.println("Error: Out of Color changers");
+                        } else {
+                            System.out.println("Error: Column is already full");
+                        }
+
+                        break;
+                    }
 
 					//This part will be used during testing, please DO NOT change it. This will result in loss of marks
                     case 5: Display(grid);
@@ -383,14 +386,12 @@ public class SU {
                 }
 				//Displays the grid after a new move was played
                 Display(grid);
-				//TODO: Checks whether a winning condition was met
                 int win = Check_Win(grid, player1);
 
                 if(win != 0) {
                     System.out.println("Player "+ win +" Wins!!!");
-                    System.out.println("Thanks for playing");
+                    Exit();
                 }
-                //TODO: Switch the players turns
 
             }
         } else {
@@ -405,11 +406,11 @@ public class SU {
      * @param grid  The current board state
      */
     public static void Display (int [][] grid) {
-        //TODO: Display the given board state with empty spots as *, player 1 as R and player 2 as Y. Shows column and row numbers at the top.
         int c = 1;
 
-        for (int r = 1; r < X; r++) {
-            System.out.print(" " +r+ " ");
+        System.out.print(" 0 ");
+        for (int r = 0; r < Y; r++) {
+            System.out.print(" " +(r+1)+ " ");
         }
 
         for (int i = 0; i < grid.length ; i++) {
@@ -433,12 +434,6 @@ public class SU {
         //TODO: Exit the game
     }
 
-    public static void diagonal(int [][] grid) {
-        int pos = 0;
-        for (int i = pos; i < grid.length; i++) {
-
-        }
-    }
 
     /**
      * Plays a normal disc in the specified position (i) in the colour of the player given. Returns the modified grid or
@@ -458,7 +453,7 @@ public class SU {
      * @param grid The current board state in a 2D array of integers
      */
     public static int Check_Win (int [][] grid, boolean player1) {
-        int player = player1 ? 1 : 0;
+        int player = player1 ? 1 : 2;
         int winner = 0;
         //TODO: Check for all the possible win conditions as well as for a possible draw.
 
