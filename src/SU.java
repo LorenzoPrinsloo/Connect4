@@ -132,6 +132,7 @@ public class SU {
 
         boolean isFirstOpen = true;
         int [] column = getColumn(grid, columnNum);
+        int destinationColNum = 0;
 
         if(isFull(column)) {
             column[0] = player;
@@ -143,15 +144,24 @@ public class SU {
 
             for(int i = column.length - 1; i > 0; i --) {
                 if(column[i] == 0 && isFirstOpen) {
-                    if(columnNum+3 > column.length - 1) {
-                        int remainder = i - 2;
-                        grid[i][remainder] = player;
+                    if(columnNum+3 > column.length) {
+                        System.out.println(column.length);
+                        System.out.println(i);
+                        int remainder = 3 - (column.length - columnNum);
+                        grid[i][remainder - 1] = player;
+                        destinationColNum = remainder - 1;
                     } else {
                         grid[i][columnNum+3] = player;
+                        destinationColNum = columnNum+3;
                     }
                     isFirstOpen = false;
                 }
             }
+
+            System.out.println("Dest "+destinationColNum);
+           int[] destCol = gravity(getColumn(grid, destinationColNum)); // retrieve and apply gravity to column
+
+            updateColumn(grid, destCol, destinationColNum); // update column in grid
         }
 
         return grid;
@@ -455,40 +465,17 @@ public class SU {
     public static int Check_Win (int [][] grid, boolean player1) {
         int player = player1 ? 1 : 2;
         int winner = 0;
-        //TODO: Check for all the possible win conditions as well as for a possible draw.
 
-        // horizontalCheck
-        for (int j = 0; j<Y-3 ; j++ ){
-            for (int i = 0; i<X; i++){
-                if (grid[i][j] == player && grid[i][j+1] == player && grid[i][j+2] == player && grid[i][j+3] == player){
-                    return player;
-                }
-            }
-        }
-        // verticalCheck
-        for (int i = 0; i<X-3 ; i++ ){
-            for (int j = 0; j<Y; j++){
-                if (grid[i][j] == player && grid[i+1][j] == player && grid[i+2][j] == player && grid[i+3][j] == player){
-                    return player;
-                }
-            }
-        }
 
-        // ascendingDiagonalCheck
-        for (int i=3; i<X; i++){
-            for (int j=0; j<Y-3; j++){
-                if (grid[i][j] == player && grid[i-1][j+1] == player && grid[i-2][j+2] == player && grid[i-3][j+3] == player)
-                    return player;
-            }
+        if(vertical(grid, player) || horizontal(grid, player)  || ascDiagonal(grid, player) || descDiagonal(grid, player)){
+            return player;
+        } else {
+            checkDraw(grid, winner);
         }
-        // descendingDiagonalCheck
-        for (int i=3; i<X; i++){
-            for (int j=3; j<Y; j++){
-                if (grid[i][j] == player && grid[i-1][j-1] == player && grid[i-2][j-2] == player && grid[i-3][j-3] == player)
-                    return player;
-            }
-        }
+        return winner;
+    }
 
+    public static void checkDraw(int [][] grid, int winner) {
         int full = 0;
         for (int i = 0; i < grid[0].length; i++) {
             if(grid[0][i] == 1 || grid[0][i] == 2) {
@@ -500,7 +487,93 @@ public class SU {
             System.out.println("Draw Game Over");
             Exit();
         }
-        return winner;
+    }
+
+    public static boolean ascDiagonal(int [][] grid, int player) {
+        for (int i=3; i<X; i++){
+            for (int j=0; j<Y-3; j++){
+                boolean check = has4ConsecutiveDiagAsc(grid, i, j, 0, player);
+                if (check) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean descDiagonal(int [][] grid, int player) {
+
+        for (int i=X-1; i > 0; i--){
+            for (int j=Y-1; j > 0; j--){
+                boolean check = has4ConsecutiveDiagDesc(grid, i, j, 0, player);
+                if (check) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean vertical(int [][] grid, int player) {
+
+        for (int i = 0; i < X; i++) {
+            boolean check = has4Consecutive(grid[i], 0, 0, player);
+            if(check){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean horizontal(int[][] grid, int player) {
+
+        for (int i = 0; i < Y; i++){
+            if(has4Consecutive(SU.getColumn(grid, i), 0, 0, player)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean has4Consecutive(int[] array, int offset, int count, int player){
+        if(offset == array.length) { // exits loop
+            return count == 4;
+        } else { // main logic
+            if(count == 4){
+                return true;
+            }
+            int c = array[offset] == player ? count + 1 : 0; // boolean ? if true : else this
+            return has4Consecutive(array, offset + 1, c , player);
+        }
+    }
+
+    public static boolean has4ConsecutiveDiagDesc(int [][] grid, int xOffset, int yOffset, int count, int player) {
+        if(xOffset == X || yOffset == Y || xOffset < 0 || yOffset < 0) { // exits loop yOffset == 0
+            return count == 4;
+        } else {
+            if(count == 4) {
+                return true;
+            }
+            int c = grid[xOffset][yOffset] == player ? count + 1 : 0;
+
+            return has4ConsecutiveDiagDesc(grid, xOffset - 1, yOffset - 1, c, player);
+        }
+    }
+
+    public static boolean has4ConsecutiveDiagAsc(int[][] grid, int xOffset, int yOffset, int count, int player) {
+        if(xOffset == X || yOffset == Y || xOffset < 0 || yOffset < 0) { // exits loop yOffset == 0
+            return count == 4;
+        } else {
+            if(count == 4) {
+                return true;
+            }
+            int c = grid[xOffset][yOffset] == player ? count + 1 : 0;
+
+            return has4ConsecutiveDiagAsc(grid, xOffset - 1, yOffset + 1, c, player);
+        }
     }
 
     /**

@@ -1,4 +1,3 @@
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -134,66 +133,44 @@ public class Connect4Test {
     }
 
     @Test
-    public void checkD(){
+    public void checkH(){
         int[][] grid = {
-                {0,2,0,0,0,0,0},
-                {0,0,0,0,0,0,0},
-                {0,0,0,2,0,2,0},
-                {2,0,0,0,2,0,0},
-                {0,0,0,2,0,0,0},
-                {0,0,2,0,0,0,0}
+            //Y  0 1 2 3 4 5 6     X
+                {0,0,0,0,0,0,0},// 0
+                {0,2,0,0,0,0,0},// 1
+                {0,0,2,0,0,0,0},// 2
+                {0,0,0,2,0,0,0},// 3
+                {0,0,0,0,2,0,0},// 4
+                {0,0,0,0,0,0,0} // 5
         };
 
+        System.out.println("Winner "+ SU.descDiagonal(grid, 2));
     }
 
-    public boolean diagonalCheck(int [][] grid, int player){
-//
-//        int c = 1;
-//        for (int r = 0; r < X; r++) {
-//            if (grid[r][c] == player && grid[r-1][c+1] == player && grid[r-2][c+2] == player && grid[r-3][c+3] == player)
-//                return true;
-//            c++;
-//        }
+    @Test
+    public void checkDraw(){
 
-        // horizontalCheck
-        for (int j = 0; j<Y-3 ; j++ ){
-            for (int i = 0; i<X; i++){
-                if (grid[i][j] == player && grid[i][j+1] == player && grid[i][j+2] == player && grid[i][j+3] == player){
-                    return true;
-                }
-            }
-        }
-        // verticalCheck
-        for (int i = 0; i<X-3 ; i++ ){
-            for (int j = 0; j<Y; j++){
-                if (grid[i][j] == player && grid[i+1][j] == player && grid[i+2][j] == player && grid[i+3][j] == player){
-                    return true;
-                }
-            }
-        }
+        int[][] fullGrid = {
+                //Y  0 1 2 3 4 5 6     X
+                {1,2,1,1,2,1,2},// 0
+                {1,2,1,2,2,2,1},// 1
+                {1,1,2,1,1,1,2},// 2
+                {1,2,2,2,1,2,2},// 3
+                {1,1,1,1,2,1,1},// 4
+                {1,2,1,1,1,2,2} // 5
+        };
 
-        // ascendingDiagonalCheck
-        for (int i=3; i<X; i++){
-            for (int j=0; j<Y-3; j++){
-                if (grid[i][j] == player && grid[i-1][j+1] == player && grid[i-2][j+2] == player && grid[i-3][j+3] == player)
-                    return true;
-            }
-        }
-        // descendingDiagonalCheck
-        for (int i=3; i<X; i++){
-            for (int j=3; j<Y; j++){
-                if (grid[i][j] == player && grid[i-1][j-1] == player && grid[i-2][j-2] == player && grid[i-3][j-3] == player)
-                    return true;
-            }
-        }
-        int full = 0;
-        for (int i = 0; i < grid[0].length; i++) {
-            if(grid[0][i] == 1 || grid[0][i] == 2) {
-                full++;
-            }
-        }
-        if (grid[0].length == full) ;
-        return false;
+        int[][] emptyGrid = {
+                //Y  0 1 2 3 4 5 6     X
+                {1,2,0,0,0,0,2},// 0
+                {1,2,1,2,2,2,1},// 1
+                {1,1,2,1,1,1,2},// 2
+                {1,2,2,2,1,2,2},// 3
+                {1,1,1,1,2,1,1},// 4
+                {1,2,1,1,1,2,2} // 5
+        };
+
+        SU.checkDraw(emptyGrid, 2);
     }
 
     public static void printMatrix(int[][] matrix){
