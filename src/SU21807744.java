@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-public class SU {
+public class SU21807744 {
     //Board size
     static int X = 6;
     static int Y = 7;
@@ -27,7 +27,7 @@ public class SU {
         boolean isFirstOpen = true;
         int [] column = getColumn(grid, columnNum);
 
-        for(int i = column.length - 1; i > 0 ; i --) {
+        for(int i = column.length - 1 ; i >= 0 ; i --) {
             if(column[i] == 0 && isFirstOpen) {
                 column[i] = player;
                 isFirstOpen = false;
@@ -176,6 +176,33 @@ public class SU {
         }
     }
 
+    public static void invalidInsert(int[][] grid, boolean player1){
+        System.out.println("Illegal move, please input legal move:");
+        if(StdIn.hasNextChar()){
+
+            String i = StdIn.readString();
+
+            if(i.matches("-?\\d+")){
+                int column = Integer.parseInt(i);
+
+                if(column <= 6) {
+
+                    if(!isFull(getColumn(grid, column))) {
+                        if(player1) {
+                            grid = insert(grid, column, 1);
+                        } else {
+                            //is player 2's turn
+                            grid = insert(grid, column, 2);
+                        }
+                    } else {
+                        StdOut.print("Column is full.\n");
+                    }
+                }
+            } else {
+                invalidInsert(grid, player1);
+            }
+        }
+    }
 
     public static int[][] insertBomb(int [][] grid, int columnNum, int player) {
         boolean isFirstOpen = true;
@@ -218,9 +245,6 @@ public class SU {
         //Shift effected columns
         int[][] effectedColumns = {getColumn(grid,xPosition - 1), getColumn(grid, xPosition), getColumn(grid,xPosition + 1)};
 
-        printMatrix(grid);
-        System.out.println();
-
         int c = -1;
         for (int[] col: effectedColumns) {
             updateColumn(grid, gravity(col), xPosition + c);
@@ -259,117 +283,142 @@ public class SU {
             //Terminal mode
 
             //TODO: Display 10 line title
-            System.out.print("****************************************************************************");
-	        System.out.print("*  _______  _______  __    _  __    _  _______  _______  _______  _   ___  *"+
+            StdOut.println("****************************************************************************");
+            StdOut.println("*  _______  _______  __    _  __    _  _______  _______  _______  _   ___  *"+
 						"\n* |       ||       ||  |  | ||  |  | ||       ||       ||       || | |   | *"+
 						"\n* |       ||   _   ||   |_| ||   |_| ||    ___||       ||_     _|| |_|   | *"+
 						"\n* |       ||  | |  ||       ||       ||   |___ |       |  |   |  |       | *"+
 						"\n* |      _||  |_|  ||  _    ||  _    ||    ___||      _|  |   |  |___    | *"+
 						"\n* |     |_ |       || | |   || | |   ||   |___ |     |_   |   |      |   | *"+
 						"\n* |_______||_______||_|  |__||_|  |__||_______||_______|  |___|      |___| *");
-	        System.out.print("*                                                                          *");
-	        System.out.print("****************************************************************************");
+            StdOut.println("*                                                                          *");
+            StdOut.println("****************************************************************************");
             //Array for current player's number of power storage
             int [] curppowers = new int[3];
             while (true) {
                 if (player1) {
-                    System.out.print("Player 1's turn (You are Red):");
+                    StdOut.print("Player 1's turn (You are Red):");
                     curppowers = p1powers;
                 } else {
-                    System.out.print("Player 2's turn (You are Yellow):");
+                    StdOut.print("Player 2's turn (You are Yellow):");
                     curppowers = p2powers;
                 }
-                System.out.print("Choose your move: \n 1. Play Normal \n 2. Play Bomb ("+curppowers[0]+" left) \n 3. Play Teleportation ("+curppowers[1]+" left) \n 4. Play Colour Changer ("+curppowers[2]+" left)\n 5. Display Gameboard \n 6. Load Test File \n 0. Exit \n");
+                StdOut.print("\nChoose your move: \n 1. Play Normal \n 2. Play Bomb ("+curppowers[0]+" left) \n 3. Play Teleportation ("+curppowers[1]+" left) \n 4. Play Colour Changer ("+curppowers[2]+" left)\n 5. Display Gameboard \n 6. Load Test File \n 0. Exit \n");
+                if(StdIn.hasNextChar()) {
 
-                Scanner in = new Scanner(System.in);
-                input = in.nextInt();
+                    String i = StdIn.readString();
+
+                    if(i.matches("-?\\d+")){
+                        input = Integer.parseInt(i);
+                    } else {
+                        input = 8; //default invalid value
+                    }
+
+                } else {
+                    input = 8;
+                }
 
                 switch(input) {
                     case 0: Exit();
                             break;
 
                     case 1: {
-                        System.out.print("Choose a column to play in:");
-                        int column = in.nextInt() - 1;
+                        StdOut.print("Choose a column to play in:\n");
 
-                        if(column <= 6) {
+                        if(StdIn.hasNextChar()){
 
-                            if(!isFull(getColumn(grid, column))) {
-                                if(player1) {
-                                    grid = insert(grid, column, 1);
-                                    player1 = false;
-                                } else {
-                                    //is player 2's turn
-                                    grid = insert(grid, column, 2);
-                                    player1 = true;
+                            String i = StdIn.readString();
+
+                            if(i.matches("^([0-6])$")){
+                                int column = Integer.parseInt(i);
+
+                                if(column <= 6) {
+
+                                    if(!isFull(getColumn(grid, column))) {
+                                        if(player1) {
+                                            grid = insert(grid, column, 1);
+                                        } else {
+                                            //is player 2's turn;
+                                            grid = insert(grid, column, 2);
+                                        }
+                                    } else {
+                                        StdOut.print("Column is full.\n");
+                                    }
                                 }
                             } else {
-                                System.out.println("Error: Column is already full");
+                                invalidInsert(grid, player1);
                             }
                         }
                         break;
                     }
 
                     case 2: {
-                        System.out.print("Choose a column to play in:");
-                        int column = in.nextInt() - 1;
+                        StdOut.print("Choose a column to play in:");
 
-                        if(!isFull(getColumn(grid, column))) {
-                            if(curppowers[0] > 0){
-                                if(player1) {
-                                    grid = insertBomb(grid, column, 1);
-                                    player1 = false;
+                        if(StdIn.hasNextChar()) {
+                            String in = StdIn.readString();
+
+                            if(in.matches("^([0-6])$")){
+                                int column = Integer.parseInt(in);
+
+                                if(!isFull(getColumn(grid, column))) {
+                                    if(curppowers[0] > 0){
+                                        if(player1) {
+                                            grid = insertBomb(grid, column, 1);
+                                        } else {
+                                            //is player 2's turn
+                                            grid = insertBomb(grid, column, 2);
+                                        }
+                                        curppowers[0]--;
+                                    } else StdOut.println("Error: Out of bombs");
                                 } else {
-                                    //is player 2's turn
-                                    grid = insertBomb(grid, column, 2);
-                                    player1 = true;
+                                    StdOut.println("Column is full.\n");
                                 }
-                                curppowers[0]--;
-                            } else System.out.println("Error: Out of bombs");
+
+                            } else {
+                                StdOut.println("Illegal move, please input legal move:");
+                            }
+
                         } else {
-                            System.out.println("Error: Column is already full");
+                            StdOut.println("Illegal move, please input legal move:");
                         }
 
                         break;
                     }
 
                     case 3: {
-                        System.out.print("Choose a column to play in:");
-                        int column = in.nextInt() - 1;
+                        StdOut.print("Choose a column to play in:");
+                        int column = StdIn.readInt();
 
                         if(curppowers[1] > 0){
                             if(player1) {
                                 grid = insertTeleporter(grid, column, 1);
-                                player1 = false;
                             } else {
                                 //is player 2's turn
                                 grid = insertTeleporter(grid, column, 2);
-                                player1 = true;
                             }
                             curppowers[1]--;
-                        } else System.out.println("Error: Out of teleporters");
+                        } else StdOut.println("Error: Out of teleporters");
 
                         break;
                     }
 
                     case 4: {
-                        System.out.print("Choose a column to play in:");
-                        int column = in.nextInt() - 1;
+                        StdOut.print("Choose a column to play in:");
+                        int column = StdIn.readInt();
 
                         if(!isFull(getColumn(grid, column))) {
                             if(curppowers[2] > 0){
                                 if(player1) {
                                     grid = insertColorChanger(grid, column, 1);
-                                    player1 = false;
                                 } else {
                                     //is player 2's turn
                                     grid = insertColorChanger(grid, column, 2);
-                                    player1 = true;
                                 }
                                 curppowers[2]--;
-                            } else System.out.println("Error: Out of Color changers");
+                            } else StdOut.println("Error: Out of Color changers");
                         } else {
-                            System.out.println("Error: Column is already full");
+                            StdOut.println("Error: Column is already full");
                         }
 
                         break;
@@ -391,7 +440,7 @@ public class SU {
 				            player1 = !player1;
 				            break;
 
-					default: System.out.println("Error invalid choice");
+					default: StdOut.println("Please choose a valid option");
                             break;
                 }
 				//Displays the grid after a new move was played
@@ -399,8 +448,22 @@ public class SU {
                 int win = Check_Win(grid, player1);
 
                 if(win != 0) {
-                    System.out.println("Player "+ win +" Wins!!!");
-                    Exit();
+                    StdOut.println("Player "+ win +" wins!");
+                    System.out.println("Do you want to play again?");
+                    System.out.println(" 1. Yes");
+                    System.out.println(" 2. No");
+
+                    int play = StdIn.readInt();
+                    if(play == 2){
+                        Exit();
+                    } else {
+                        clearBoard(grid);
+                        player1 = true;
+                    }
+                }
+
+                if(input != 8) { //if input not invalid
+                    player1 = !player1;
                 }
 
             }
@@ -410,36 +473,45 @@ public class SU {
         }
 
     }
+    
+    public static void clearBoard(int [][] grid){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j] = 0;
+            }
+        }
+    }
 
     /**
      * Displays the grid, empty spots as *, player 1 as R and player 2 as Y. Shows column and row numbers at the top.
      * @param grid  The current board state
      */
     public static void Display (int [][] grid) {
-        int c = 1;
+        int c = 0;
 
-        System.out.print(" 0 ");
-        for (int r = 0; r < Y; r++) {
-            System.out.print(" " +(r+1)+ " ");
+        System.out.println();
+        StdOut.print("  0");
+        for (int r = 0; r < Y - 1; r++) {
+            StdOut.print(" "+ (r+1));
         }
 
         for (int i = 0; i < grid.length ; i++) {
-            System.out.println();
-            System.out.print(" " +c+ " ");
+            StdOut.println();
+            StdOut.print(c);
             for (int j = 0; j < grid[i].length ; j++) {
-                if(grid[i][j] == 0) System.out.print(" * ");
-                if(grid[i][j] == 1) System.out.print(" R ");
-                if(grid[i][j] == 2) System.out.print(" Y ");
+                if(grid[i][j] == 0) StdOut.print(" *");
+                if(grid[i][j] == 1) StdOut.print(" R");
+                if(grid[i][j] == 2) StdOut.print(" Y");
             }
             c++;
         }
+        System.out.println("\n");
     }
 
     /**
      * Exits the current game state
      */
     public static void Exit() {
-        System.out.println("Thanks for playing");
         System.exit(0);
         //TODO: Exit the game
     }
@@ -484,8 +556,17 @@ public class SU {
         }
         if (grid[0].length == full) {
             winner = 0; //Draw
-            System.out.println("Draw Game Over");
-            Exit();
+            System.out.println("Draw!");
+            System.out.println("Do you want to play again?");
+            System.out.println(" 1. Yes");
+            System.out.println(" 2. No");
+
+            int play = StdIn.readInt();
+            if(play == 2){
+                Exit();
+            } else {
+                clearBoard(grid);
+            }
         }
     }
 
@@ -530,7 +611,7 @@ public class SU {
     public static boolean horizontal(int[][] grid, int player) {
 
         for (int i = 0; i < Y; i++){
-            if(has4Consecutive(SU.getColumn(grid, i), 0, 0, player)){
+            if(has4Consecutive(SU21807744.getColumn(grid, i), 0, 0, player)){
                 return true;
             }
         }

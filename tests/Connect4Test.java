@@ -17,26 +17,26 @@ public class Connect4Test {
 
         //is Full
         int[][] fullExpected = { {1,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,1,2,2} };
-        int[][] fullResult = SU.insertTeleporter(grid, 0, 1);
+        int[][] fullResult = SU21807744.insertTeleporter(grid, 0, 1);
 
         assertTrue(fullExpected[0][0] == fullResult[0][0]);
 
 
         // is Empty
         int[][] emptyExpected = { {1,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,0,2,2} };
-        int[][] emtpyResult = SU.insertTeleporter(emptyExpected, 1, 1);
+        int[][] emtpyResult = SU21807744.insertTeleporter(emptyExpected, 1, 1);
 
         assertTrue(1 == fullResult[3][1]);
 
         // wrap around
         int[][] wrapAroundExpected = { {2,0,2,2}, {2,0,2,2}, {1,0,2,2} ,{2,1,2,2} };
-        int[][] wrapAroundResult = SU.insertTeleporter(grid, 1, 1);
+        int[][] wrapAroundResult = SU21807744.insertTeleporter(grid, 1, 1);
 
         assertTrue(wrapAroundExpected[2][0] == wrapAroundResult[2][0]);
 
         // standard teleport
         int[][] teleportExpected = { {0,0,2,2}, {0,0,2,2}, {0,0,2,2} ,{2,2,2,2}  };
-        int[][] teleportResult = SU.insertTeleporter(teleportExpected, 0, 1);
+        int[][] teleportResult = SU21807744.insertTeleporter(teleportExpected, 0, 1);
 
         assertTrue(1 == teleportResult[2][3]);
     }
@@ -49,7 +49,7 @@ public class Connect4Test {
         int player = 1;
 
 
-        int [][] result = SU.insertBomb(grid, columnNum, player);
+        int [][] result = SU21807744.insertBomb(grid, columnNum, player);
 
         printMatrix(result);
         System.out.println();
@@ -63,7 +63,7 @@ public class Connect4Test {
         int[][] grid = { {2,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,1,2,2} };
         int[] expected = {0,0,0,1};
 
-        int[] result = SU.getColumn(grid, 1);
+        int[] result = SU21807744.getColumn(grid, 1);
 
        assertTrue(Arrays.equals(result, expected));
     }
@@ -72,7 +72,7 @@ public class Connect4Test {
     public void gravity(){
         int[] column  = { 2, 0, 0, 0 };
         int[] expected = { 0, 0, 0, 2 };
-        int[] result = SU.gravity(column);
+        int[] result = SU21807744.gravity(column);
 
         printArray(result);
         System.out.println();
@@ -86,31 +86,31 @@ public class Connect4Test {
         int[][] grid = { {2,1,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,0,2,2} };
         int [] column = {0 ,0, 0, 1};
 
-        SU.updateColumn(grid, column, 1);
+        SU21807744.updateColumn(grid, column, 1);
         printMatrix(grid);
     }
 
     @Test
     public void isInYRange(){
-        assertFalse(SU.isInYRange(0, 2));
-        assertTrue(SU.isInYRange(1, 2));
+        assertFalse(SU21807744.isInYRange(0, 2));
+        assertTrue(SU21807744.isInYRange(1, 2));
     }
 
     @Test
     public void isInXRange(){
-        assertFalse(SU.isInXRange(0, 2));
-        assertTrue(SU.isInXRange(1, 2));
+        assertFalse(SU21807744.isInXRange(0, 2));
+        assertTrue(SU21807744.isInXRange(1, 2));
     }
 
     @Test
     public void insertColorChanger(){
         int[][] grid = { {2,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,1,2,2} };
-        int[][] result = SU.insertColorChanger(grid, 1, 2);
+        int[][] result = SU21807744.insertColorChanger(grid, 1, 2);
 
         assertTrue(result[3][1] == 2);
 
         int[][] emptyCol = { {2,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,0,2,2} };
-        int[][] emptyRes = SU.insertColorChanger(emptyCol, 1, 2);
+        int[][] emptyRes = SU21807744.insertColorChanger(emptyCol, 1, 2);
 
         assertTrue(emptyRes[3][1] == 2);
 
@@ -120,7 +120,7 @@ public class Connect4Test {
     @Test
     public void insert(){
         int[][] grid = { {2,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,1,2,2} };
-        int [][] result = SU.insert(grid, 1, 2);
+        int [][] result = SU21807744.insert(grid, 1, 2);
 
         assertTrue(result[2][1] == 2);
     }
@@ -129,7 +129,7 @@ public class Connect4Test {
     public void display() {
         int[][] grid = { {2,0,2,2}, {2,0,2,2}, {2,0,2,2} ,{2,1,2,2} };
 
-        SU.Display(grid);
+        SU21807744.Display(grid);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class Connect4Test {
                 {0,0,0,0,0,0,0} // 5
         };
 
-        System.out.println("Winner "+ SU.descDiagonal(grid, 2));
+        System.out.println("Winner "+ SU21807744.descDiagonal(grid, 2));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class Connect4Test {
                 {1,2,1,1,1,2,2} // 5
         };
 
-        SU.checkDraw(emptyGrid, 2);
+        SU21807744.checkDraw(emptyGrid, 2);
     }
 
     public static void printMatrix(int[][] matrix){

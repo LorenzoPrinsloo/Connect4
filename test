@@ -18,299 +18,309 @@ if [ -f src/"connect4.java" ]; then
 	echo "Remember to rename your class name as well in your Java file."
 	echo "---------------------------------------------------------------"
 fi
-if [ ! -f src/"SU$1.class" ]; then
+if [ -f src/"SU$1.class" ]; then
 	rm src/"SU$1.class"
 fi
+if [ -f "SU$1.class" ]; then
+	rm "SU$1.class"
+fi
 javac src/"SU$1.java"
-mv src/"SU$1.class" ./
-timeout 5m java "SU$1" T < test_files/test0.in > out/out0.out
-if [ ! -f out/out0.out ]; then
+mv src/"SU$1.class" .
+if [ ! -f "StdIn.class" ]; then
+	cp src/"StdIn.class" .
+fi
+if [ ! -f "StdOut.class" ]; then
+	cp src/"StdOut.class" .
+fi
+timeout 0.5m java "SU$1" T < test_files/test0.in > out/out0.out
+if [ ! -f out/out1.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out0.out test_files/test0.txt > /dev/null ; then
-echo ">>>> Passed test 0 :-D"
+if diff -BZ out/out0.out test_files/test0.txt > /dev/null ; then 
+echo ">>>> Passed test 0 :-D" 
 else
-echo ">>>> ERROR Test Case 0 failed!"
+echo ">>>> ERROR Test Case 0 failed!" 
 diff test_files/test0.txt out/out0.out > results/diff0.out
 echo
 echo "Test case description"
 cat test_files/test0.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test1.in > out/out1.out
+
+timeout 0.5m java "SU$1" T < test_files/test1.in > out/out1.out
 if [ ! -f out/out1.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out1.out test_files/test1.txt > /dev/null ; then
-echo ">>>> Passed test 1 :-D"
+if diff -BZ out/out1.out test_files/test1.txt > /dev/null ; then 
+echo ">>>> Passed test 1 :-D" 
 else
-echo ">>>> ERROR Test Case 1 failed!"
+echo ">>>> ERROR Test Case 1 failed!" 
 diff test_files/test1.txt out/out1.out > results/diff1.out
 echo
 echo "Test case description"
 cat test_files/test1.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test2.in > out/out2.out
+timeout 0.5m java "SU$1" T < test_files/test2.in > out/out2.out
 if [ ! -f out/out2.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out2.out test_files/test2.txt > /dev/null ; then
-echo ">>>> Passed test 2 :-D"
+if diff -BZ out/out2.out test_files/test2.txt > /dev/null ; then 
+echo ">>>> Passed test 2 :-D" 
 else
-echo ">>>> ERROR Test Case 2 failed!"
+echo ">>>> ERROR Test Case 2 failed!" 
 diff test_files/test2.txt out/out2.out > results/diff2.out
 echo
 echo "Test case description"
 cat test_files/test2.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test3.in > out/out3.out
+timeout 0.5m java "SU$1" T < test_files/test3.in > out/out3.out
 if [ ! -f out/out3.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out3.out test_files/test3.txt > /dev/null ; then
-echo ">>>> Passed test 3 :-D"
+if diff -BZ out/out3.out test_files/test3.txt > /dev/null ; then 
+echo ">>>> Passed test 3 :-D" 
 else
-echo ">>>> ERROR Test Case 3 failed!"
+echo ">>>> ERROR Test Case 3 failed!" 
 diff test_files/test3.txt out/out3.out > results/diff3.out
 echo
 echo "Test case description"
 cat test_files/test3.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test4.in > out/out4.out
+timeout 0.5m java "SU$1" T < test_files/test4.in > out/out4.out
 if [ ! -f out/out4.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out4.out test_files/test4.txt > /dev/null ; then
-echo ">>>> Passed test 4 :-D"
+if diff -BZ out/out4.out test_files/test4.txt > /dev/null ; then 
+echo ">>>> Passed test 4 :-D" 
 else
-echo ">>>> ERROR Test Case 4 failed!"
+echo ">>>> ERROR Test Case 4 failed!" 
 diff test_files/test4.txt out/out4.out > results/diff4.out
 echo
 echo "Test case description"
 cat test_files/test4.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test5.in > out/out5.out
+timeout 0.5m java "SU$1" T < test_files/test5.in > out/out5.out
 if [ ! -f out/out5.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out5.out test_files/test5.txt > /dev/null ; then
-echo ">>>> Passed test 5 :-D"
+if diff -BZ out/out5.out test_files/test5.txt > /dev/null ; then 
+echo ">>>> Passed test 5 :-D" 
 else
-echo ">>>> ERROR Test Case 5 failed!"
+echo ">>>> ERROR Test Case 5 failed!" 
 diff test_files/test5.txt out/out5.out > results/diff5.out
 echo
 echo "Test case description"
 cat test_files/test5.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test6.in > out/out6.out
+timeout 0.5m java "SU$1" T < test_files/test6.in > out/out6.out
 if [ ! -f out/out6.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out6.out test_files/test6.txt > /dev/null ; then
-echo ">>>> Passed test 6 :-D"
+if diff -BZ out/out6.out test_files/test6.txt > /dev/null ; then 
+echo ">>>> Passed test 6 :-D" 
 else
-echo ">>>> ERROR Test Case 6 failed!"
+echo ">>>> ERROR Test Case 6 failed!" 
 diff test_files/test6.txt out/out6.out > results/diff6.out
 echo
 echo "Test case description"
 cat test_files/test6.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test7.in > out/out7.out
+timeout 0.5m java "SU$1" T < test_files/test7.in > out/out7.out
 if [ ! -f out/out7.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out7.out test_files/test7.txt > /dev/null ; then
-echo ">>>> Passed test 7 :-D"
+if diff -BZ out/out7.out test_files/test7.txt > /dev/null ; then 
+echo ">>>> Passed test 7 :-D" 
 else
-echo ">>>> ERROR Test Case 7 failed!"
+echo ">>>> ERROR Test Case 7 failed!" 
 diff test_files/test7.txt out/out7.out > results/diff7.out
 echo
 echo "Test case description"
 cat test_files/test7.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test8.in > out/out8.out
+timeout 0.5m java "SU$1" T < test_files/test8.in > out/out8.out
 if [ ! -f out/out8.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out8.out test_files/test8.txt > /dev/null ; then
-echo ">>>> Passed test 8 :-D"
+if diff -BZ out/out8.out test_files/test8.txt > /dev/null ; then 
+echo ">>>> Passed test 8 :-D" 
 else
-echo ">>>> ERROR Test Case 8 failed!"
+echo ">>>> ERROR Test Case 8 failed!" 
 diff test_files/test8.txt out/out8.out > results/diff8.out
 echo
 echo "Test case description"
 cat test_files/test8.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test9.in > out/out9.out
+timeout 0.5m java "SU$1" T < test_files/test9.in > out/out9.out
 if [ ! -f out/out9.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out9.out test_files/test9.txt > /dev/null ; then
-echo ">>>> Passed test 9 :-D"
+if diff -BZ out/out9.out test_files/test9.txt > /dev/null ; then 
+echo ">>>> Passed test 9 :-D" 
 else
-echo ">>>> ERROR Test Case 9 failed!"
+echo ">>>> ERROR Test Case 9 failed!" 
 diff test_files/test9.txt out/out9.out > results/diff9.out
 echo
 echo "Test case description"
 cat test_files/test9.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test10.in > out/out10.out
+timeout 0.5m java "SU$1" T < test_files/test10.in > out/out10.out
 if [ ! -f out/out10.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out10.out test_files/test10.txt > /dev/null ; then
-echo ">>>> Passed test 10 :-D"
+if diff -BZ out/out10.out test_files/test10.txt > /dev/null ; then 
+echo ">>>> Passed test 10 :-D" 
 else
-echo ">>>> ERROR Test Case 10 failed!"
+echo ">>>> ERROR Test Case 10 failed!" 
 diff test_files/test10.txt out/out10.out > results/diff10.out
 echo
 echo "Test case description"
 cat test_files/test10.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test11.in > out/out11.out
+timeout 0.5m java "SU$1" T < test_files/test11.in > out/out11.out
 if [ ! -f out/out11.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out11.out test_files/test11.txt > /dev/null ; then
-echo ">>>> Passed test 11 :-D"
+if diff -BZ out/out11.out test_files/test11.txt > /dev/null ; then 
+echo ">>>> Passed test 11 :-D" 
 else
-echo ">>>> ERROR Test Case 11 failed!"
+echo ">>>> ERROR Test Case 11 failed!" 
 diff test_files/test11.txt out/out11.out > results/diff11.out
 echo
 echo "Test case description"
 cat test_files/test11.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test12.in > out/out12.out
+timeout 0.5m java "SU$1" T < test_files/test12.in > out/out12.out
 if [ ! -f out/out12.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out12.out test_files/test12.txt > /dev/null ; then
-echo ">>>> Passed test 12 :-D"
+if diff -BZ out/out12.out test_files/test12.txt > /dev/null ; then 
+echo ">>>> Passed test 12 :-D" 
 else
-echo ">>>> ERROR Test Case 12 failed!"
+echo ">>>> ERROR Test Case 12 failed!" 
 diff test_files/test12.txt out/out12.out > results/diff12.out
 echo
 echo "Test case description"
 cat test_files/test12.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test13.in > out/out13.out
+timeout 0.5m java "SU$1" T < test_files/test13.in > out/out13.out
 if [ ! -f out/out13.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out13.out test_files/test13.txt > /dev/null ; then
-echo ">>>> Passed test 13 :-D"
+if diff -BZ out/out13.out test_files/test13.txt > /dev/null ; then 
+echo ">>>> Passed test 13 :-D" 
 else
-echo ">>>> ERROR Test Case 13 failed!"
+echo ">>>> ERROR Test Case 13 failed!" 
 diff test_files/test13.txt out/out13.out > results/diff13.out
 echo
 echo "Test case description"
 cat test_files/test13.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test14.in > out/out14.out
+timeout 0.5m java "SU$1" T < test_files/test14.in > out/out14.out
 if [ ! -f out/out14.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out14.out test_files/test14.txt > /dev/null ; then
-echo ">>>> Passed test 14 :-D"
+if diff -BZ out/out14.out test_files/test14.txt > /dev/null ; then 
+echo ">>>> Passed test 14 :-D" 
 else
-echo ">>>> ERROR Test Case 14 failed!"
+echo ">>>> ERROR Test Case 14 failed!" 
 diff test_files/test14.txt out/out14.out > results/diff14.out
 echo
 echo "Test case description"
 cat test_files/test14.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test15.in > out/out15.out
+timeout 0.5m java "SU$1" T < test_files/test15.in > out/out15.out
 if [ ! -f out/out15.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out15.out test_files/test15.txt > /dev/null ; then
-echo ">>>> Passed test 15 :-D"
+if diff -BZ out/out15.out test_files/test15.txt > /dev/null ; then 
+echo ">>>> Passed test 15 :-D" 
 else
-echo ">>>> ERROR Test Case 15 failed!"
+echo ">>>> ERROR Test Case 15 failed!" 
 diff test_files/test15.txt out/out15.out > results/diff15.out
 echo
 echo "Test case description"
 cat test_files/test15.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test16.in > out/out16.out
+timeout 0.5m java "SU$1" T < test_files/test16.in > out/out16.out
 if [ ! -f out/out16.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out16.out test_files/test16.txt > /dev/null ; then
-echo ">>>> Passed test 16 :-D"
+if diff -BZ out/out16.out test_files/test16.txt > /dev/null ; then 
+echo ">>>> Passed test 16 :-D" 
 else
-echo ">>>> ERROR Test Case 16 failed!"
+echo ">>>> ERROR Test Case 16 failed!" 
 diff test_files/test16.txt out/out16.out > results/diff16.out
 echo
 echo "Test case description"
 cat test_files/test16.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test17.in > out/out17.out
+timeout 0.5m java "SU$1" T < test_files/test17.in > out/out17.out
 if [ ! -f out/out17.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out17.out test_files/test17.txt > /dev/null ; then
-echo ">>>> Passed test 17 :-D"
+if diff -BZ out/out17.out test_files/test17.txt > /dev/null ; then 
+echo ">>>> Passed test 17 :-D" 
 else
-echo ">>>> ERROR Test Case 17 failed!"
+echo ">>>> ERROR Test Case 17 failed!" 
 diff test_files/test17.txt out/out17.out > results/diff17.out
 echo
 echo "Test case description"
 cat test_files/test17.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test18.in > out/out18.out
+timeout 0.5m java "SU$1" T < test_files/test18.in > out/out18.out
 if [ ! -f out/out18.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out18.out test_files/test18.txt > /dev/null ; then
-echo ">>>> Passed test 18 :-D"
+if diff -BZ out/out18.out test_files/test18.txt > /dev/null ; then 
+echo ">>>> Passed test 18 :-D" 
 else
-echo ">>>> ERROR Test Case 18 failed!"
+echo ">>>> ERROR Test Case 18 failed!" 
 diff test_files/test18.txt out/out18.out > results/diff18.out
 echo
 echo "Test case description"
 cat test_files/test18.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test19.in > out/out19.out
+timeout 0.5m java "SU$1" T < test_files/test19.in > out/out19.out
 if [ ! -f out/out19.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out19.out test_files/test19.txt > /dev/null ; then
-echo ">>>> Passed test 19 :-D"
+if diff -BZ out/out19.out test_files/test19.txt > /dev/null ; then 
+echo ">>>> Passed test 19 :-D" 
 else
-echo ">>>> ERROR Test Case 19 failed!"
+echo ">>>> ERROR Test Case 19 failed!" 
 diff test_files/test19.txt out/out19.out > results/diff19.out
 echo
 echo "Test case description"
 cat test_files/test19.ifo
 echo
 fi
-timeout 5m java "SU$1" T < test_files/test20.in > out/out20.out
+timeout 0.5m java "SU$1" T < test_files/test20.in > out/out20.out
 if [ ! -f out/out20.out ]; then
 echo ">>>> ERROR File not found! There is something wrong as the output file is not generated.${NC}"
 fi
-if diff -BZ out/out20.out test_files/test20.txt > /dev/null ; then
-echo ">>>> Passed test 20 :-D"
+if diff -BZ out/out20.out test_files/test20.txt > /dev/null ; then 
+echo ">>>> Passed test 20 :-D" 
 else
-echo ">>>> ERROR Test Case 20 failed!"
+echo ">>>> ERROR Test Case 20 failed!" 
 diff test_files/test20.txt out/out20.out > results/diff20.out
 echo
 echo "Test case description"
