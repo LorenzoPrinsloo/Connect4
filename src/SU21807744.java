@@ -182,7 +182,7 @@ public class SU21807744 {
 
             String i = StdIn.readString();
 
-            if(i.matches("-?\\d+")){
+            if(i.matches("[0-6]")){
                 int column = Integer.parseInt(i);
 
                 if(column <= 6) {
