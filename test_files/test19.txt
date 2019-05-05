@@ -801,7 +801,7 @@ Choose a column to play in:
   0 1 2 3 4 5 6  
 0 R Y R Y R Y Y  
 1 Y R Y R Y R Y  
-2 R Y R Y R Y R  
+2 R Y R Y R Y R
 3 R Y R Y R Y R  
 4 Y R Y R Y R Y  
 5 R Y R Y R Y R  

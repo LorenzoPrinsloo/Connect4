@@ -204,6 +204,38 @@ public class SU21807744 {
         }
     }
 
+    public static void invalidInsertBomb(int [][] grid, boolean player1, int [] curppowers) {
+        StdOut.println("Illegal move, please input legal move:");
+
+        if(StdIn.hasNextChar()) {
+            String in = StdIn.readString();
+
+            if(in.matches("^([0-6])$")){
+                int column = Integer.parseInt(in);
+
+                if(!isFull(getColumn(grid, column))) {
+                    if(curppowers[0] > 0){
+                        if(player1) {
+                            grid = insertBomb(grid, column, 1);
+                        } else {
+                            //is player 2's turn
+                            grid = insertBomb(grid, column, 2);
+                        }
+                        curppowers[0]--;
+                    } else StdOut.println("Error: Out of bombs");
+                } else {
+                    StdOut.println("Column is full.\n");
+                }
+
+            } else {
+                invalidInsertBomb(grid, player1, curppowers);
+            }
+
+        } else {
+            invalidInsertBomb(grid, player1, curppowers);
+        }
+    }
+
     public static int[][] insertBomb(int [][] grid, int columnNum, int player) {
         boolean isFirstOpen = true;
 
@@ -262,19 +294,21 @@ public class SU21807744 {
         }
     }
 
+    public static boolean player1 = true;
+    public static boolean gui = true;
+
     public static void main (String[] args) {
         //TODO: Read in a comamnd line argument that states whether the program will be in either terminal
         //      mode (T) or in GUI mode (G) [Hint: use args and the variable below]
 
         //Sets whether the game is in terminal mode or GUI mode
-        boolean gui = false;
 
         int input = 0;
         int pos = -1;
         //The 6-by-7 grid that represents the gameboard, it is initially empty
         int [][] grid = new int [X][Y];
         //Shows which player's turn it is, true for player 1 and false for player 2
-        boolean player1 = true;
+//        boolean player1 = true;
         //Shows the number of special tokens a player has left
         int [] p1powers = {2, 2, 2};
         int [] p2powers = {2, 2, 2};
@@ -470,6 +504,37 @@ public class SU21807744 {
         } else {
             //Graphics mode
 
+            try {
+                int [] curppowers = new int[3];
+                GUI.main(new String [1]);
+
+                while(true) {
+
+                    if (player1) {
+                        GUI.currentPlayer = "player1";
+                        GUI.curpowers = p1powers;
+                    } else {
+                        GUI.currentPlayer = "player2";
+                        GUI.curpowers = p2powers;
+                    }
+
+                    int win = Check_Win(GUI.grid, player1);
+
+                    if(win != 0) {
+                        clearBoard(GUI.grid);
+                        GUI.clearGUI();
+                        GUI.DisplayWinner(win);
+                        p1powers = new int []{2,2,2};
+                        p2powers = new int []{2,2,2};
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Something terribly wrong happened");
+                e.printStackTrace();
+            }
+
+
         }
 
     }
@@ -556,16 +621,23 @@ public class SU21807744 {
         }
         if (grid[0].length == full) {
             winner = 0; //Draw
-            System.out.println("Draw!");
-            System.out.println("Do you want to play again?");
-            System.out.println(" 1. Yes");
-            System.out.println(" 2. No");
 
-            int play = StdIn.readInt();
-            if(play == 2){
-                Exit();
+            if(!gui) {
+                System.out.println("Draw!");
+                System.out.println("Do you want to play again?");
+                System.out.println(" 1. Yes");
+                System.out.println(" 2. No");
+
+                int play = StdIn.readInt();
+                if(play == 2){
+                    Exit();
+                } else {
+                    clearBoard(grid);
+                }
             } else {
                 clearBoard(grid);
+                GUI.clearGUI();
+                GUI.DisplayDraw();
             }
         }
     }
